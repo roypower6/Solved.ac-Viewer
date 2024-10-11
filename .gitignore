@@ -21,7 +21,7 @@ doc/api/
 # Avoid committing generated Javascript files:
 *.dart.js
 *.info.json      
-*.js             
+*.js
 *.js_
 *.js.deps
 *.js.map
@@ -148,4 +148,4 @@ $RECYCLE.BIN/
 .DS_Store
 
 #lib
-lib/service/
+lib/service/admob_service.dart
