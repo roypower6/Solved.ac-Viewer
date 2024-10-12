@@ -94,19 +94,6 @@ class AppInfoScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Icon(UniconsLine.instagram),
-                SizedBox(width: 10),
-                Text(
-                  'seunggi860',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
             Spacer(),
             Align(
               alignment: Alignment.bottomCenter,

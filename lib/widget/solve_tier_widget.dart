@@ -75,7 +75,10 @@ class TierWidget extends StatelessWidget {
     31: Colors.purple.shade700, // Master
   };
 
-  TierWidget({super.key, required this.tierNumber});
+  TierWidget({
+    super.key,
+    required this.tierNumber,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,7 @@ class TierWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: borderColor, // Set background to white or any other color
+        color: Colors.white, // Set background to white or any other color
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -107,7 +110,7 @@ class TierWidget extends StatelessWidget {
           const Text(
             "Solve 티어",
             style: TextStyle(
-              color: Colors.white, // Text color set to black
+              color: Colors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -115,15 +118,15 @@ class TierWidget extends StatelessWidget {
           const Text(
             ":",
             style: TextStyle(
-              color: Colors.white, // Text color set to black
+              color: Colors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             tierName,
-            style: const TextStyle(
-              color: Colors.white, // Text color set to black
+            style: TextStyle(
+              color: borderColor,
               fontSize: 27,
               fontWeight: FontWeight.bold,
             ),

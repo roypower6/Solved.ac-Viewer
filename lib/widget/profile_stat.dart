@@ -95,73 +95,82 @@ class ProfileInfo extends StatelessWidget {
                             final organizations =
                                 snapshot2.data as List<OrganizationModel>;
 
-                            return Container(
-                              padding: const EdgeInsets.all(15),
-                              margin: const EdgeInsets.only(
-                                right: 18,
-                                left: 18,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.green.shade500,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      const Text(
-                                        '소속',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
+                            return Tooltip(
+                              triggerMode: TooltipTriggerMode.tap,
+                              showDuration: const Duration(seconds: 4),
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                              message:
+                                  '소속 기관 유형: ${organizations.first.type}\n소속 기관 전체 난이도 기여 수: ${organizations.first.voteCount}\n소속 기관 전체 해결 문제 수: ${organizations.first.solvedCount}',
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                margin: const EdgeInsets.only(
+                                  right: 18,
+                                  left: 18,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        const Text(
+                                          '소속',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        organizations.first.name,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          organizations.first.name,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        '레이팅: ${organizations.first.rating}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          '문제풀이 레이팅: ${organizations.first.rating}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        '인원 수: ${organizations.first.userCount}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        Text(
+                                          '소속 인원 수: ${organizations.first.userCount}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           }
@@ -169,7 +178,7 @@ class ProfileInfo extends StatelessWidget {
                             child: Text(
                               "소속 기관이 없습니다.",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 30,
                               ),
@@ -197,80 +206,76 @@ class ProfileInfo extends StatelessWidget {
                                     showDuration: const Duration(seconds: 4),
                                     message:
                                         '코인으로 환전했을 때 수수료 1%를 제하고 \n${((user.stardusts / coinrate.rate) * (99 / 100)).toStringAsFixed(2)}코인으로 바꿀 수 있습니다.',
-                                    child: Expanded(
-                                      flex: 0, // 보유 코인 수 박스가 더 넓게
-                                      child: Container(
-                                        width: 250,
-                                        padding: const EdgeInsets.all(16),
-                                        margin: const EdgeInsets.only(
-                                            right: 4, left: 4),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blueAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(0.1),
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                const Text(
-                                                  '보유 코인 수',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                  ),
+                                    child: Container(
+                                      width: 250,
+                                      padding: const EdgeInsets.all(16),
+                                      margin: const EdgeInsets.only(
+                                          right: 4, left: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                '보유 코인 수',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
                                                 ),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                  '${user.coins}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                '${user.coins}',
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
-                                              children: [
-                                                // 별가루 수
-                                                const Text(
-                                                  '보유 별가루 수',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                  ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            children: [
+                                              // 별가루 수
+                                              const Text(
+                                                '보유 별가루 수',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
                                                 ),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                  '${user.stardusts}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                '${user.stardusts}',
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   );
@@ -284,7 +289,7 @@ class ProfileInfo extends StatelessWidget {
                               padding: const EdgeInsets.all(16),
                               margin: const EdgeInsets.only(left: 4, right: 4),
                               decoration: BoxDecoration(
-                                color: Colors.redAccent.shade200,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
@@ -301,7 +306,7 @@ class ProfileInfo extends StatelessWidget {
                                   const Text(
                                     '최대 스트릭',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
@@ -310,7 +315,7 @@ class ProfileInfo extends StatelessWidget {
                                   Text(
                                     '${user.maxStreak}일',
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                     ),

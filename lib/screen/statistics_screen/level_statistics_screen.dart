@@ -72,7 +72,7 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
             radius: 50,
             titleStyle: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.black),
-            titlePositionPercentageOffset: percentage >= 10 ? 1.8 : 0,
+            titlePositionPercentageOffset: percentage >= 10 ? 2.0 : 0,
           );
         }).toList(),
         centerSpaceRadius: 50,

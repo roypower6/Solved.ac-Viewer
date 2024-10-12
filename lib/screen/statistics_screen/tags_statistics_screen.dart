@@ -94,7 +94,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             showTitle: percentage >= 10, // 10% 이상만 타이틀 표시
             titlePositionPercentageOffset:
-                percentage >= 10 ? 1.7 : 0, // 라벨을 바깥으로 이동
+                percentage >= 10 ? 2.0 : 0, // 라벨을 바깥으로 이동
           );
         }).toList(),
       ),

@@ -1,8 +1,10 @@
 class ProblemsModel {
+  final int problemId;
   final String titleko;
   final int level;
 
   ProblemsModel.fromJson(Map<String, dynamic> json)
-      : titleko = json['titleKo'],
+      : problemId = json['problemId'],
+        titleko = json['titleKo'],
         level = json['level'];
 }

@@ -56,7 +56,7 @@ class ProblemsList extends StatelessWidget {
                     ),
                     triggerMode: TooltipTriggerMode.tap,
                     message:
-                        '${problem.titleko} (${probTierMapping[problem.level]})',
+                        '${problem.titleko} \n백준 문제번호: ${problem.problemId}\n문제 티어: ${probTierMapping[problem.level]}',
                     showDuration: const Duration(seconds: 4),
                     child: Icon(
                       Icons.book_rounded,
