@@ -71,8 +71,8 @@ class ProblemSearchScreenState extends State<ProblemSearchScreen> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     final problemId = int.tryParse(_problemIdController.text);
                     if (problemId != null) {
                       setState(() {
@@ -80,7 +80,30 @@ class ProblemSearchScreenState extends State<ProblemSearchScreen> {
                       });
                     }
                   },
-                  child: const Text("검색"),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 7, horizontal: 40),
+                    decoration: BoxDecoration(
+                      color: Colors.green, // 버튼 색상
+                      borderRadius: BorderRadius.circular(30), // 둥근 모서리
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3), // 그림자 위치
+                        ),
+                      ],
+                    ),
+                    child: const Text(
+                      '검색',
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // 텍스트 색상
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Expanded(

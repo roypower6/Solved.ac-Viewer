@@ -41,7 +41,7 @@ class ShopScreenState extends State<ShopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SolvedAC Shop"),
+        title: const Text("Solved.ac Shop"),
       ),
       body: Column(
         children: [
