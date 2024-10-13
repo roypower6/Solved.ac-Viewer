@@ -160,7 +160,7 @@ class ProfileInfo extends StatelessWidget {
                                           height: 10,
                                         ),
                                         Text(
-                                          '소속 인원 수: ${organizations.first.userCount}',
+                                          '소속 인원 수: ${organizations.first.userCount}명',
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,

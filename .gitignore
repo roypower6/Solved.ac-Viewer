@@ -170,3 +170,4 @@ lib/service/admob_service.dart
 .buildlog/
 .svn/
 migrate_working_dir/
+*.properties

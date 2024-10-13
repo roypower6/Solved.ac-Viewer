@@ -166,7 +166,7 @@ class EndDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Developed by Rhee Seung-gi',
+                      'Developed by Rhee',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class EndDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      '© 2024 Rhee Seung-gi. All rights reserved.',
+                      '© 2024 Rhee. All rights reserved.',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
