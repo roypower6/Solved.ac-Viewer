@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solved_ac_browser/model/class_statistics_model.dart';
 import 'package:solved_ac_browser/service/api_service.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:solved_ac_browser/service/admob_service.dart';
 
 class ClassStatisticsScreen extends StatefulWidget {
   final String handle;
@@ -15,28 +13,11 @@ class ClassStatisticsScreen extends StatefulWidget {
 
 class ClassStatisticsScreenState extends State<ClassStatisticsScreen> {
   late Future<List<ClassStatisticsModel>> _classStatisticsFuture;
-  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     _classStatisticsFuture = SolvedacApi.getClassStatisticsInfo(widget.handle);
-    _createBannerAd();
-  }
-
-  void _createBannerAd() {
-    _bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: AdMobService.bannerAdUnitId!,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
   }
 
   @override
@@ -45,43 +26,32 @@ class ClassStatisticsScreenState extends State<ClassStatisticsScreen> {
       appBar: AppBar(
         title: const Text("클래스별 문제풀이 통계"),
       ),
-      body: Column(
-        children: [
-          // 메인 콘텐츠
-          Expanded(
-            child: FutureBuilder<List<ClassStatisticsModel>>(
-              future: _classStatisticsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('통계를 불러오는데 실패했습니다.'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('통계 데이터가 없습니다.'));
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 5),
-                        Expanded(
-                          flex: 1,
-                          child: _buildClassList(snapshot.data!),
-                        ),
-                      ],
+      body: Expanded(
+        child: FutureBuilder<List<ClassStatisticsModel>>(
+          future: _classStatisticsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('통계를 불러오는데 실패했습니다.'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('통계 데이터가 없습니다.'));
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 5),
+                    Expanded(
+                      flex: 1,
+                      child: _buildClassList(snapshot.data!),
                     ),
-                  );
-                }
-              },
-            ),
-          ),
-          // 광고 배너를 위한 공간
-          if (_bannerAd != null)
-            SizedBox(
-              height: _bannerAd!.size.height.toDouble(), // 배너 높이만큼 공간 확보
-              child: AdWidget(ad: _bannerAd!),
-            ),
-        ],
+                  ],
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

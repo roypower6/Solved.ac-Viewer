@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:solved_ac_browser/model/problem_search_model.dart';
-import 'package:solved_ac_browser/service/admob_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProblemSearchScreen extends StatefulWidget {
@@ -16,28 +14,6 @@ class ProblemSearchScreen extends StatefulWidget {
 class ProblemSearchScreenState extends State<ProblemSearchScreen> {
   final TextEditingController _problemIdController = TextEditingController();
   Future<ProblemModel?>? _problemFuture;
-  BannerAd? _bannerAd;
-
-  @override
-  void initState() {
-    super.initState();
-    _createBannerAd();
-  }
-
-  void _createBannerAd() {
-    _bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: AdMobService.bannerAdUnitId!,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
 
   Future<ProblemModel?> fetchProblem(int problemId) async {
     final url =
@@ -56,205 +32,190 @@ class ProblemSearchScreenState extends State<ProblemSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("백준 문제 검색")),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _problemIdController,
-                  decoration: const InputDecoration(
-                    labelText: "문제 ID",
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _problemIdController,
+              decoration: const InputDecoration(
+                labelText: "문제 ID",
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () {
+                final problemId = int.tryParse(_problemIdController.text);
+                if (problemId != null) {
+                  setState(() {
+                    _problemFuture = fetchProblem(problemId);
+                  });
+                }
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 7, horizontal: 40),
+                decoration: BoxDecoration(
+                  color: Colors.green, // 버튼 색상
+                  borderRadius: BorderRadius.circular(30), // 둥근 모서리
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3), // 그림자 위치
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    final problemId = int.tryParse(_problemIdController.text);
-                    if (problemId != null) {
-                      setState(() {
-                        _problemFuture = fetchProblem(problemId);
-                      });
-                    }
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 7, horizontal: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.green, // 버튼 색상
-                      borderRadius: BorderRadius.circular(30), // 둥근 모서리
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3), // 그림자 위치
-                        ),
-                      ],
-                    ),
-                    child: const Text(
-                      '검색',
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // 텍스트 색상
-                      ),
-                    ),
+                child: const Text(
+                  '검색',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // 텍스트 색상
                   ),
                 ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: _problemFuture != null
-                      ? FutureBuilder<ProblemModel?>(
-                          future: _problemFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            } else if (snapshot.hasError ||
-                                snapshot.data == null) {
-                              return const Text(
-                                "문제를 찾을 수 없습니다.",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _problemFuture != null
+                  ? FutureBuilder<ProblemModel?>(
+                      future: _problemFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError || snapshot.data == null) {
+                          return const Text(
+                            "문제를 찾을 수 없습니다.",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                            ),
+                          );
+                        } else {
+                          final problem = snapshot.data!;
+                          return SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  problem.titleKo,
+                                  style: const TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              );
-                            } else {
-                              final problem = snapshot.data!;
-                              return SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                const SizedBox(height: 8),
+                                // Mapping level to tier name and color
+                                Row(
                                   children: [
-                                    Text(
-                                      problem.titleKo,
-                                      style: const TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    // Mapping level to tier name and color
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          "문제 티어: ",
-                                          style: TextStyle(
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "${probTierMapping[problem.level]}",
-                                          style: TextStyle(
-                                            shadows: const [
-                                              Shadow(
-                                                color: Colors.grey,
-                                                offset: Offset(1.5, 1.5),
-                                                blurRadius: 6,
-                                              ),
-                                            ],
-                                            fontSize: 25,
-                                            color:
-                                                probTierColors[problem.level],
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "성공한 유저 수: ${problem.acceptedUserCount}명",
-                                      style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "평균 시도 횟수: ${problem.averageTries.toStringAsFixed(2)}회",
-                                      style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 16),
                                     const Text(
-                                      "태그:",
+                                      "문제 티어: ",
                                       style: TextStyle(
                                           fontSize: 23,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Wrap(
-                                      spacing: 8,
-                                      children: problem.tags.map((tag) {
-                                        return Chip(
-                                          label: Text(
-                                            tag.displayNames.first.name,
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                    Text(
+                                      "${probTierMapping[problem.level]}",
+                                      style: TextStyle(
+                                        shadows: const [
+                                          Shadow(
+                                            color: Colors.grey,
+                                            offset: Offset(1.5, 1.5),
+                                            blurRadius: 6,
                                           ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Center(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          final url =
-                                              'https://www.acmicpc.net/problem/${problem.problemId}';
-                                          launchUrl(Uri.parse(url));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 7, horizontal: 40),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green, // 버튼 색상
-                                            borderRadius: BorderRadius.circular(
-                                                30), // 둥근 모서리
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                spreadRadius: 2,
-                                                blurRadius: 5,
-                                                offset: const Offset(
-                                                    0, 3), // 그림자 위치
-                                              ),
-                                            ],
-                                          ),
-                                          child: const Text(
-                                            '문제 보러 사이트 가기',
-                                            style: TextStyle(
-                                              fontSize: 21,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white, // 텍스트 색상
-                                            ),
-                                          ),
-                                        ),
+                                        ],
+                                        fontSize: 25,
+                                        color: probTierColors[problem.level],
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                              );
-                            }
-                          },
-                        )
-                      : const SizedBox.shrink(),
-                ),
-              ],
+                                Text(
+                                  "성공한 유저 수: ${problem.acceptedUserCount}명",
+                                  style: const TextStyle(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "평균 시도 횟수: ${problem.averageTries.toStringAsFixed(2)}회",
+                                  style: const TextStyle(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  "태그:",
+                                  style: TextStyle(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Wrap(
+                                  spacing: 8,
+                                  children: problem.tags.map((tag) {
+                                    return Chip(
+                                      label: Text(
+                                        tag.displayNames.first.name,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                const SizedBox(height: 16),
+                                Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final url =
+                                          'https://www.acmicpc.net/problem/${problem.problemId}';
+                                      launchUrl(Uri.parse(url));
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7, horizontal: 40),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green, // 버튼 색상
+                                        borderRadius:
+                                            BorderRadius.circular(30), // 둥근 모서리
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 5,
+                                            offset:
+                                                const Offset(0, 3), // 그림자 위치
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Text(
+                                        '문제 보러 사이트 가기',
+                                        style: TextStyle(
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white, // 텍스트 색상
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : const SizedBox.shrink(),
             ),
-          ),
-          if (_bannerAd != null)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

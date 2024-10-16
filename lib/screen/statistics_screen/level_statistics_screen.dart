@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:solved_ac_browser/model/level_statistics_model.dart';
-import 'package:solved_ac_browser/service/admob_service.dart';
 import 'package:solved_ac_browser/service/api_service.dart';
 
 class LevelStatisticsScreen extends StatefulWidget {
@@ -16,28 +14,11 @@ class LevelStatisticsScreen extends StatefulWidget {
 
 class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
   late Future<List<LevelStatisticsModel>> _levelStatisticsFuture;
-  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     _levelStatisticsFuture = _fetchLevelStatistics();
-    createBannerAd();
-  }
-
-  void createBannerAd() {
-    _bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: AdMobService.bannerAdUnitId!,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
   }
 
   Future<List<LevelStatisticsModel>> _fetchLevelStatistics() async {
@@ -132,17 +113,6 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
               }
             },
           ),
-          if (_bannerAd != null)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
-            ),
         ],
       ),
     );

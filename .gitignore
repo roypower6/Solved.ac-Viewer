@@ -158,9 +158,6 @@ $RECYCLE.BIN/
 # Mac
 .DS_Store
 
-#lib
-lib/service/admob_service.dart
-
 # Miscellaneous
 *.class
 *.log

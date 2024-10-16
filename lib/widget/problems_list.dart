@@ -11,7 +11,7 @@ class ProblemsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 2,
+      flex: 4,
       child: Container(
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.only(left: 16, right: 16),

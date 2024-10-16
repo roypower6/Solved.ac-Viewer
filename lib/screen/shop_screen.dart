@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solved_ac_browser/model/shop_item_model.dart';
 import 'package:solved_ac_browser/service/api_service.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:solved_ac_browser/service/admob_service.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -13,28 +11,11 @@ class ShopScreen extends StatefulWidget {
 
 class ShopScreenState extends State<ShopScreen> {
   late Future<List<ShopItemModel>> _shopItemsFuture;
-  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     _shopItemsFuture = SolvedacApi.getShopItems(); // Fetch shop items
-    _createBannerAd(); // Initialize ad banner
-  }
-
-  void _createBannerAd() {
-    _bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: AdMobService.bannerAdUnitId!,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
   }
 
   @override
@@ -43,31 +24,21 @@ class ShopScreenState extends State<ShopScreen> {
       appBar: AppBar(
         title: const Text("Solved.ac Shop"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<ShopItemModel>>(
-              future: _shopItemsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(
-                      child: Text('Failed to load shop items.'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No items available.'));
-                } else {
-                  return _buildShopList(snapshot.data!); // Build shop item list
-                }
-              },
-            ),
-          ),
-          if (_bannerAd != null)
-            SizedBox(
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
-            ),
-        ],
+      body: Expanded(
+        child: FutureBuilder<List<ShopItemModel>>(
+          future: _shopItemsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Failed to load shop items.'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No items available.'));
+            } else {
+              return _buildShopList(snapshot.data!); // Build shop item list
+            }
+          },
+        ),
       ),
     );
   }

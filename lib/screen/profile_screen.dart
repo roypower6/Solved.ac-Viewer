@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solved_ac_browser/service/admob_service.dart';
 import 'package:solved_ac_browser/service/api_service.dart';
 import 'package:solved_ac_browser/widget/end_drawer.dart';
 import 'package:solved_ac_browser/widget/profile_stat.dart';
@@ -22,12 +20,10 @@ class ProfileScreenState extends State<ProfileScreen> {
   late String currentHandle;
   late Timer _loadingTimer;
   bool _isLoading = true;
-  BannerAd? bannerAd;
 
   @override
   void initState() {
     super.initState();
-    _createBannerAd();
     currentHandle = widget.userId;
     user = _fetchUserInfo();
 
@@ -37,15 +33,6 @@ class ProfileScreenState extends State<ProfileScreen> {
         showHandleUpdateDialog();
       }
     });
-  }
-
-  void _createBannerAd() {
-    bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: AdMobService.bannerAdUnitId!,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
   }
 
   @override
@@ -143,52 +130,35 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          FutureBuilder(
-            future: user,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError || !snapshot.hasData) {
-                // 잘못된 아이디 입력 시 다이얼로그 호출
-                Future.delayed(Duration.zero, () => showHandleUpdateDialog());
-                return const Center(
-                  child: Text('유저 정보를 불러오는데 실패했습니다.'),
-                );
-              } else {
-                return Column(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: TopPortion(user: user), // 위쪽 프로필, 배경
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: ProfileInfo(
-                        user: user,
-                        onEditHandlePressed: showHandleUpdateDialog, // 콜백 전달
-                      ),
-                    ),
-                  ],
-                );
-              }
-            },
-          ),
-          if (bannerAd != null)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: StatefulBuilder(builder: (context, setState) {
-                return SizedBox(
-                  width: bannerAd!.size.width.toDouble(),
-                  height: bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: bannerAd!),
-                );
-              }),
-            ),
-        ],
+      body: FutureBuilder(
+        future: user,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError || !snapshot.hasData) {
+            // 잘못된 아이디 입력 시 다이얼로그 호출
+            Future.delayed(Duration.zero, () => showHandleUpdateDialog());
+            return const Center(
+              child: Text('유저 정보를 불러오는데 실패했습니다.'),
+            );
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: TopPortion(user: user), // 위쪽 프로필, 배경
+                ),
+                Expanded(
+                  flex: 5,
+                  child: ProfileInfo(
+                    user: user,
+                    onEditHandlePressed: showHandleUpdateDialog, // 콜백 전달
+                  ),
+                ),
+              ],
+            );
+          }
+        },
       ),
       endDrawer:
           EndDrawer(currentHandle: currentHandle, clearPrefs: clearPrefs),
