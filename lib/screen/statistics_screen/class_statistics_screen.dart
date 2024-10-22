@@ -26,32 +26,22 @@ class ClassStatisticsScreenState extends State<ClassStatisticsScreen> {
       appBar: AppBar(
         title: const Text("클래스별 문제풀이 통계"),
       ),
-      body: Expanded(
-        child: FutureBuilder<List<ClassStatisticsModel>>(
-          future: _classStatisticsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('통계를 불러오는데 실패했습니다.'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('통계 데이터가 없습니다.'));
-            } else {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 5),
-                    Expanded(
-                      flex: 1,
-                      child: _buildClassList(snapshot.data!),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+      body: FutureBuilder<List<ClassStatisticsModel>>(
+        future: _classStatisticsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('통계를 불러오는데 실패했습니다.'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('통계 데이터가 없습니다.'));
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _buildClassList(snapshot.data!),
+            );
+          }
+        },
       ),
     );
   }
