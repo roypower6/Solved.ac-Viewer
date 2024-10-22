@@ -12,10 +12,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ### **1. 프로필 정보 조회**
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/4990571e-8515-45bb-929f-5d0b30191be1" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>💫 메인 프로필 화면</h4>
       <p>solved.ac 아이디 입력 후 표시되는 첫 화면입니다. 다음 정보를 한눈에 확인할 수 있습니다:</p>
       <ul>
@@ -31,10 +31,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ### **2. 메뉴 및 기능 네비게이션**
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/27b8f7fe-bb23-482f-8140-627757fe01ea" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>📱 슬라이드 메뉴</h4>
       <p>직관적인 사이드 메뉴를 통해 다양한 통계 기능에 쉽게 접근할 수 있습니다.</p>
     </td>
@@ -44,10 +44,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ### **3. 문제 해결 통계**
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/e26f9299-a5fc-46cf-a1ae-ead87d3ce186" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>🏷️ 태그별 통계</h4>
       <p>알고리즘 유형별 문제 해결 현황을 확인할 수 있습니다:</p>
       <ul>
@@ -60,10 +60,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/1e776a40-93a5-4253-8a54-36fbba92a43f" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>📊 난이도별 통계</h4>
       <p>문제 난이도별 해결 현황을 보여줍니다:</p>
       <ul>
@@ -77,10 +77,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ### **4. 클래스 진행도**
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/c5d87b5a-d87d-4fa2-93ce-a39130c7c3ab" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>📚 클래스별 진행도</h4>
       <p>solved.ac의 클래스 시스템 진행 상황을 추적합니다:</p>
       <ul>
@@ -94,10 +94,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ### **5. 문제 검색**
 <table>
   <tr>
-    <td width="30%">
+    <td width="40%">
       <img src="https://github.com/user-attachments/assets/cf21dafe-3257-407b-9efe-032fc8e4b3c6" width="200" height="400"/>
     </td>
-    <td width="70%">
+    <td width="60%">
       <h4>🔍 문제 검색 기능</h4>
       <p>ID로 백준 문제를 검색하고 다음 정보를 확인할 수 있습니다:</p>
       <ul>
