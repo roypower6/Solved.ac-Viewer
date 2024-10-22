@@ -10,10 +10,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 ## **✨ 주요 기능**
 
 ### **1. 프로필 정보 조회**
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/4990571e-8515-45bb-929f-5d0b30191be1" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/4990571e-8515-45bb-929f-5d0b30191be1" width="200"/>
     </td>
     <td width="60%">
       <h4>💫 메인 프로필 화면</h4>
@@ -29,10 +29,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 </table>
 
 ### **2. 메뉴 및 기능 네비게이션**
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/27b8f7fe-bb23-482f-8140-627757fe01ea" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/27b8f7fe-bb23-482f-8140-627757fe01ea" width="200"/>
     </td>
     <td width="60%">
       <h4>📱 슬라이드 메뉴</h4>
@@ -42,10 +42,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 </table>
 
 ### **3. 문제 해결 통계**
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/e26f9299-a5fc-46cf-a1ae-ead87d3ce186" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/e26f9299-a5fc-46cf-a1ae-ead87d3ce186" width="200"/>
     </td>
     <td width="60%">
       <h4>🏷️ 태그별 통계</h4>
@@ -58,10 +58,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
   </tr>
 </table>
 
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/1e776a40-93a5-4253-8a54-36fbba92a43f" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/1e776a40-93a5-4253-8a54-36fbba92a43f" width="200"/>
     </td>
     <td width="60%">
       <h4>📊 난이도별 통계</h4>
@@ -75,10 +75,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 </table>
 
 ### **4. 클래스 진행도**
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/c5d87b5a-d87d-4fa2-93ce-a39130c7c3ab" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/c5d87b5a-d87d-4fa2-93ce-a39130c7c3ab" width="200"/>
     </td>
     <td width="60%">
       <h4>📚 클래스별 진행도</h4>
@@ -92,10 +92,10 @@ solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 
 </table>
 
 ### **5. 문제 검색**
-<table>
+<table width="100%">
   <tr>
-    <td width="40%">
-      <img src="https://github.com/user-attachments/assets/cf21dafe-3257-407b-9efe-032fc8e4b3c6" width="200" height="400"/>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/cf21dafe-3257-407b-9efe-032fc8e4b3c6" width="200"/>
     </td>
     <td width="60%">
       <h4>🔍 문제 검색 기능</h4>
