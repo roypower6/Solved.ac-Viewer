@@ -24,21 +24,20 @@ class ShopScreenState extends State<ShopScreen> {
       appBar: AppBar(
         title: const Text("Solved.ac Shop"),
       ),
-      body: Expanded(
-        child: FutureBuilder<List<ShopItemModel>>(
-          future: _shopItemsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('Failed to load shop items.'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No items available.'));
-            } else {
-              return _buildShopList(snapshot.data!); // Build shop item list
-            }
-          },
-        ),
+      body: FutureBuilder<List<ShopItemModel>>(
+        // Expanded 제거
+        future: _shopItemsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Failed to load shop items.'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No items available.'));
+          } else {
+            return _buildShopList(snapshot.data!);
+          }
+        },
       ),
     );
   }

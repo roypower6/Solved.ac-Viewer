@@ -14,7 +14,7 @@ class ProblemsList extends StatelessWidget {
       flex: 4,
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        margin: const EdgeInsets.only(left: 16, right: 16),
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(15),
