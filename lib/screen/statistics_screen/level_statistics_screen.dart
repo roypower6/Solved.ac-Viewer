@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:solved_ac_browser/model/level_statistics_model.dart';
+import 'package:solved_ac_browser/screen/statistics_screen/constants.dart';
+import 'package:solved_ac_browser/screen/statistics_screen/stat_card.dart';
 import 'package:solved_ac_browser/service/api_service.dart';
+import 'package:solved_ac_browser/widget/problems_list.dart';
 
 class LevelStatisticsScreen extends StatefulWidget {
   final String handle;
-
   const LevelStatisticsScreen({super.key, required this.handle});
 
   @override
@@ -28,127 +30,135 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
   }
 
   Color _getColorForLevel(int level) {
-    final colorMapping = {
-      0: Colors.brown.shade500,
-      1: Colors.grey,
-      2: Colors.amber.shade700,
-      3: const Color.fromARGB(255, 50, 170, 120),
-      4: Colors.blue.shade700,
-      5: Colors.red.shade700
-    };
-    return colorMapping[level ~/ 5] ?? Colors.transparent;
-  }
-
-  Widget _buildPieChart(List<LevelStatisticsModel> levelStats) {
-    int totalSolved = levelStats.fold(0, (sum, item) => sum + item.solved);
-    return PieChart(
-      PieChartData(
-        sections: levelStats.map((levelStat) {
-          double percentage = (levelStat.solved / totalSolved) * 100;
-          String tierName = levelTiers[levelStat.level] ?? 'Unknown Tier';
-          return PieChartSectionData(
-            value: levelStat.solved.toDouble(),
-            title: percentage < 10 ? '' : "$tierName\n${levelStat.solved} 문제",
-            color: _getColorForLevel(levelStat.level),
-            radius: 50,
-            titleStyle: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.black),
-            titlePositionPercentageOffset: percentage >= 10 ? 2.0 : 0,
-          );
-        }).toList(),
-        centerSpaceRadius: 50,
-      ),
-    );
-  }
-
-  Widget _buildLevelList(List<LevelStatisticsModel> levelStats) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: levelStats.length,
-        itemBuilder: (context, index) {
-          final levelStat = levelStats[index];
-          final tierName = levelTiers[levelStat.level] ?? 'Unknown Tier';
-          return ListTile(
-            title: Text(tierName,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            trailing: Text('${levelStat.solved} solved',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-          );
-        },
-      ),
-    );
+    if (level <= 5) return AppColors.tierColors['bronze']!;
+    if (level <= 10) return AppColors.tierColors['silver']!;
+    if (level <= 15) return AppColors.tierColors['gold']!;
+    if (level <= 20) return AppColors.tierColors['platinum']!;
+    if (level <= 25) return AppColors.tierColors['diamond']!;
+    return AppColors.tierColors['ruby']!;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("난이도별 문제풀이 통계")),
-      body: Stack(
-        children: [
-          FutureBuilder<List<LevelStatisticsModel>>(
-            future: _levelStatisticsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Text('통계를 불러오는데 실패했습니다.'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('통계 데이터가 없습니다.'));
-              } else {
-                List<LevelStatisticsModel> sortedStatistics = snapshot.data!
-                  ..sort((a, b) => b.solved.compareTo(a.solved));
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Expanded(
-                          flex: 1, child: _buildPieChart(sortedStatistics)),
-                      const SizedBox(height: 20),
-                      _buildLevelList(sortedStatistics),
-                    ],
-                  ),
-                );
-              }
-            },
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Text('난이도별 문제풀이 통계', style: AppStyles.headerStyle),
+      ),
+      body: SafeArea(
+        child: FutureBuilder<List<LevelStatisticsModel>>(
+          future: _levelStatisticsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              );
+            } else if (snapshot.hasError || !snapshot.hasData) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline,
+                        size: 48, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text(
+                      snapshot.hasError ? '통계를 불러오는데 실패했습니다.' : '통계 데이터가 없습니다.',
+                      style: AppStyles.bodyStyle,
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final sortedStats = snapshot.data!
+              ..sort((a, b) => b.solved.compareTo(a.solved));
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildPieChartCard(sortedStats),
+                const SizedBox(height: 5),
+                _buildTierListCard(sortedStats),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPieChartCard(List<LevelStatisticsModel> stats) {
+    return StatCard(
+      title: '난이도별 분포',
+      height: 420,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: PieChart(
+          PieChartData(
+            sectionsSpace: 2,
+            centerSpaceRadius: 70,
+            sections: stats.map((stat) {
+              final percentage = (stat.solved /
+                      stats.fold(0, (sum, item) => sum + item.solved)) *
+                  100;
+              return PieChartSectionData(
+                value: stat.solved.toDouble(),
+                title:
+                    percentage >= 5 ? '${percentage.toStringAsFixed(1)}%' : '',
+                color: _getColorForLevel(stat.level),
+                radius: 100,
+                titleStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              );
+            }).toList(),
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTierListCard(List<LevelStatisticsModel> stats) {
+    return StatCard(
+      height: 250,
+      title: '티어별 해결 문제',
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: stats.map((stat) {
+            final tierName = probTierMapping[stat.level] ?? 'Unknown';
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Container(
+                    width: 4,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: _getColorForLevel(stat.level),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(tierName, style: AppStyles.bodyStyle),
+                  ),
+                  Text(
+                    '${stat.solved} solved',
+                    style: AppStyles.bodyStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 }
-
-final Map<int, String> levelTiers = {
-  0: "Unrated / Not Ratable",
-  1: "Bronze V",
-  2: "Bronze IV",
-  3: "Bronze III",
-  4: "Bronze II",
-  5: "Bronze I",
-  6: "Silver V",
-  7: "Silver IV",
-  8: "Silver III",
-  9: "Silver II",
-  10: "Silver I",
-  11: "Gold V",
-  12: "Gold IV",
-  13: "Gold III",
-  14: "Gold II",
-  15: "Gold I",
-  16: "Platinum V",
-  17: "Platinum IV",
-  18: "Platinum III",
-  19: "Platinum II",
-  20: "Platinum I",
-  21: "Diamond V",
-  22: "Diamond IV",
-  23: "Diamond III",
-  24: "Diamond II",
-  25: "Diamond I",
-  26: "Ruby V",
-  27: "Ruby IV",
-  28: "Ruby III",
-  29: "Ruby II",
-  30: "Ruby I",
-};

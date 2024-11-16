@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:solved_ac_browser/model/background_model.dart';
 import 'package:solved_ac_browser/model/badge_model.dart';
@@ -7,6 +6,7 @@ import 'package:solved_ac_browser/model/class_statistics_model.dart';
 import 'package:solved_ac_browser/model/coin_rate_model.dart';
 import 'package:solved_ac_browser/model/level_statistics_model.dart';
 import 'package:solved_ac_browser/model/organization_model.dart';
+import 'package:solved_ac_browser/model/problem_num_search_model.dart';
 import 'package:solved_ac_browser/model/problems_list_model.dart';
 import 'package:solved_ac_browser/model/shop_item_model.dart';
 import 'package:solved_ac_browser/model/tags_statistics_model.dart';
@@ -169,5 +169,24 @@ class SolvedacApi {
       return coinrate;
     }
     return null;
+  }
+
+  static Future<List<ProblemModel>> searchProblems({
+    required String query,
+    String direction = 'asc',
+    int page = 1,
+    String sort = 'title',
+  }) async {
+    final url = Uri.parse(
+      'https://solved.ac/api/v3/search/problem?query=$query&direction=$direction&page=$page&sort=$sort',
+    );
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final List<dynamic> items = data['items'];
+      return items.map((item) => ProblemModel.fromJson(item)).toList();
+    }
+    return [];
   }
 }

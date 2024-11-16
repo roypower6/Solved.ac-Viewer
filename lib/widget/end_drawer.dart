@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solved_ac_browser/screen/appinfo_screen.dart';
-import 'package:solved_ac_browser/screen/problem_search_screen.dart';
+import 'package:solved_ac_browser/screen/search_screen/problem_name_search_screen.dart';
+import 'package:solved_ac_browser/screen/search_screen/problem_num_search_screen.dart';
 import 'package:solved_ac_browser/screen/statistics_screen/class_statistics_screen.dart';
 import 'package:solved_ac_browser/screen/login_screen.dart';
 import 'package:solved_ac_browser/screen/statistics_screen/tags_statistics_screen.dart';
@@ -72,10 +73,23 @@ class EndDrawer extends StatelessWidget {
                 ),
               ],
             ),
-            ListTile(
-              leading: const Icon(Icons.search),
-              title: const Text("백준 문제 검색하기"),
-              onTap: () => _navigateTo(context, const ProblemSearchScreen()),
+            ExpansionTile(
+              leading: const Icon(Icons.search_rounded),
+              title: const Text("문제 검색"),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.format_list_numbered_rounded),
+                  title: const Text("백준 문제 번호로 검색하기"),
+                  onTap: () =>
+                      _navigateTo(context, const ProblemNumSearchScreen()),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.abc_rounded),
+                  title: const Text("백준 문제 이름으로 검색하기"),
+                  onTap: () =>
+                      _navigateTo(context, const ProblemNameSearchScreen()),
+                )
+              ],
             ),
             ListTile(
               leading: const Icon(Icons.shopping_bag_rounded),
@@ -109,7 +123,7 @@ class EndDrawer extends StatelessWidget {
                       Icon(Icons.info_outline, color: Colors.grey),
                       SizedBox(width: 10),
                       Text(
-                        'App Version: 1.0.0',
+                        'App Version: 1.0.3',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
