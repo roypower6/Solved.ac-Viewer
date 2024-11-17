@@ -51,6 +51,27 @@ class TopPortion extends StatelessWidget {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 15),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Tooltip(
+                        triggerMode: TooltipTriggerMode.tap,
+                        showDuration: const Duration(seconds: 10),
+                        message:
+                            "배경 이름: ${background.displayName}\n배경 설명: ${background.displayDescription}\n획득 조건: ${background.conditions}",
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        child: const Icon(
+                          Icons.photo_size_select_actual_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(left: 25),
                     child: Align(
                       alignment: Alignment.bottomLeft,
@@ -141,8 +162,11 @@ class TopPortion extends StatelessWidget {
                                 ),
                               );
                             },
-                            icon: const Icon(Icons.info_rounded,
-                                size: 30, color: Colors.white),
+                            icon: const Icon(
+                              Icons.info_rounded,
+                              size: 30,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),

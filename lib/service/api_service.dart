@@ -28,7 +28,10 @@ class SolvedacApi {
   static Future<BackgroundModel?> getbackgroundInfo(String backgroundId) async {
     final url = Uri.parse(
         "https://solved.ac/api/v3/background/show?backgroundId=$backgroundId");
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: {'x-solvedac-language': 'ko'},
+    );
 
     if (response.statusCode == 200) {
       final backgroundInfo = await jsonDecode(response.body);

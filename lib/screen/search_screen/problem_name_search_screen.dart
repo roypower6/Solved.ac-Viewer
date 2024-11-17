@@ -44,7 +44,7 @@ class ProblemNameSearchScreenState extends State<ProblemNameSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('문제 이름 검색'),
+        title: const Text('백준 문제이름 검색'),
       ),
       body: Column(
         children: [

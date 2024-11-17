@@ -25,6 +25,7 @@ class _ProblemNameSearchDetailScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 15),
             TierWidget(tierNumber: widget.problem.level),
             const SizedBox(height: 24),
             Padding(
@@ -85,7 +86,7 @@ class _ProblemNameSearchDetailScreenState
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   buildProblemLinkButton(widget.problem.problemId),
                 ],
               ),

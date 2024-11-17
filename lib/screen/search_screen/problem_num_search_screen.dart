@@ -51,7 +51,7 @@ class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("백준 문제 검색")),
+      appBar: AppBar(title: const Text("백준 문제번호 검색")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -124,7 +124,11 @@ class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
               const SizedBox(height: 4),
               Text(
                 '문제 ${problem.problemId}번',
-                style: TextStyle(color: Colors.grey[600], fontSize: 20),
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
               Row(
@@ -141,7 +145,7 @@ class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
                   Text(
                     '${problem.acceptedUserCount}명 해결',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: Colors.grey[800],
                       fontSize: 18,
                     ),
                   ),
@@ -150,7 +154,7 @@ class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
               const SizedBox(height: 16),
               Text(
                 "평균 시도 횟수: ${problem.averageTries.toStringAsFixed(1)}회",
-                style: TextStyle(color: Colors.grey[600], fontSize: 17),
+                style: TextStyle(color: Colors.grey[800], fontSize: 17),
               ),
               const SizedBox(height: 16),
               const Text("태그:",
