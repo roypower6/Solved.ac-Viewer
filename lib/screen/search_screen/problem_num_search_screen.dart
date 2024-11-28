@@ -15,16 +15,16 @@ class ProblemNumSearchScreen extends StatefulWidget {
 
 class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
   final TextEditingController _problemIdController = TextEditingController();
-  Future<ProblemModel?>? _problemFuture;
+  Future<ProblemNumSearchModel?>? _problemFuture;
   bool _isLoading = false;
 
-  Future<ProblemModel?> fetchProblem(int problemId) async {
+  Future<ProblemNumSearchModel?> fetchProblem(int problemId) async {
     final url =
         Uri.parse('https://solved.ac/api/v3/problem/show?problemId=$problemId');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        return ProblemModel.fromJson(jsonDecode(response.body));
+        return ProblemNumSearchModel.fromJson(jsonDecode(response.body));
       }
     } catch (error) {
       if (kDebugMode) {
@@ -99,7 +99,7 @@ class ProblemNumSearchScreenState extends State<ProblemNumSearchScreen> {
       return const SizedBox.shrink();
     }
 
-    return FutureBuilder<ProblemModel?>(
+    return FutureBuilder<ProblemNumSearchModel?>(
       future: _problemFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError || snapshot.data == null) {

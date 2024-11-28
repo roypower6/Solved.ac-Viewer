@@ -13,7 +13,7 @@ class ProblemNameSearchScreen extends StatefulWidget {
 
 class ProblemNameSearchScreenState extends State<ProblemNameSearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<ProblemModel> _problems = [];
+  List<ProblemNumSearchModel> _problems = [];
   bool _isLoading = false;
 
   Future<void> _searchProblems(String query) async {

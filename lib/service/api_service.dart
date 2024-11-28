@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:solved_ac_browser/model/background_model.dart';
 import 'package:solved_ac_browser/model/badge_model.dart';
-import 'package:solved_ac_browser/model/class_statistics_model.dart';
+import 'package:solved_ac_browser/model/statistics_model/class_statistics_model.dart';
 import 'package:solved_ac_browser/model/coin_rate_model.dart';
-import 'package:solved_ac_browser/model/level_statistics_model.dart';
+import 'package:solved_ac_browser/model/statistics_model/level_statistics_model.dart';
 import 'package:solved_ac_browser/model/organization_model.dart';
 import 'package:solved_ac_browser/model/problem_num_search_model.dart';
 import 'package:solved_ac_browser/model/problems_list_model.dart';
 import 'package:solved_ac_browser/model/shop_item_model.dart';
-import 'package:solved_ac_browser/model/tags_statistics_model.dart';
+import 'package:solved_ac_browser/model/statistics_model/tags_statistics_model.dart';
 import 'package:solved_ac_browser/model/user_model.dart';
 
 class SolvedacApi {
@@ -58,8 +58,8 @@ class SolvedacApi {
     return null;
   }
 
-  static Future<List<ProblemsModel>?> getProblemsInfo(String handle) async {
-    List<ProblemsModel> problemsInstances = [];
+  static Future<List<ProblemsListModel>?> getProblemsInfo(String handle) async {
+    List<ProblemsListModel> problemsInstances = [];
     final url =
         Uri.parse("https://solved.ac/api/v3/user/top_100?handle=$handle");
     final response = await http.get(url);
@@ -70,7 +70,7 @@ class SolvedacApi {
       // items 리스트에서 각 항목을 ProblemsModel로 변환
       List<dynamic> items = data['items'];
       for (var item in items) {
-        problemsInstances.add(ProblemsModel.fromJson(item));
+        problemsInstances.add(ProblemsListModel.fromJson(item));
       }
       return problemsInstances;
     }
@@ -174,7 +174,7 @@ class SolvedacApi {
     return null;
   }
 
-  static Future<List<ProblemModel>> searchProblems({
+  static Future<List<ProblemNumSearchModel>> searchProblems({
     required String query,
     String direction = 'asc',
     int page = 1,
@@ -188,7 +188,7 @@ class SolvedacApi {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       final List<dynamic> items = data['items'];
-      return items.map((item) => ProblemModel.fromJson(item)).toList();
+      return items.map((item) => ProblemNumSearchModel.fromJson(item)).toList();
     }
     return [];
   }

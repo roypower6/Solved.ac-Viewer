@@ -1,3 +1,4 @@
+//유저 정보 모델
 class UserModel {
   final String handle;
   final String profileImageUrl;

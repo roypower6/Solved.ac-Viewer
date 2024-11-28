@@ -1,3 +1,4 @@
+//코인 환율 모델
 class CoinRateModel {
   final int rate;
 

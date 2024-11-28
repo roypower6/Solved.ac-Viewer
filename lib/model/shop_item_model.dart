@@ -1,3 +1,4 @@
+//코인샵 아이템 정보 모델
 class ShopItemModel {
   final String itemId;
   final String itemImageUrl;

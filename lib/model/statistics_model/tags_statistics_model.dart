@@ -1,3 +1,4 @@
+//태그별 통계 정보 모델
 class TagStatisticsModel {
   final String key;
   final int solved;

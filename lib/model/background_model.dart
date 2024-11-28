@@ -1,3 +1,4 @@
+//앱 상단 배경화면 정보 모델
 class BackgroundModel {
   final String backgroundImageUrl;
   final dynamic fallbackbackgroundImageUrl;

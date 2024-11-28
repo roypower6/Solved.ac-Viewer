@@ -4,7 +4,7 @@ import 'package:solved_ac_browser/widget/solve_tier_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProblemNameSearchDetailScreen extends StatefulWidget {
-  final ProblemModel problem;
+  final ProblemNumSearchModel problem;
 
   const ProblemNameSearchDetailScreen({super.key, required this.problem});
 

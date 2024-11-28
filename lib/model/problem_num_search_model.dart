@@ -1,4 +1,5 @@
-class ProblemModel {
+//
+class ProblemNumSearchModel {
   final int problemId;
   final String titleKo;
   final bool isSolvable;
@@ -8,7 +9,7 @@ class ProblemModel {
   final double averageTries;
   final List<Tag> tags;
 
-  ProblemModel({
+  ProblemNumSearchModel({
     required this.problemId,
     required this.titleKo,
     required this.isSolvable,
@@ -19,11 +20,11 @@ class ProblemModel {
     required this.tags,
   });
 
-  factory ProblemModel.fromJson(Map<String, dynamic> json) {
+  factory ProblemNumSearchModel.fromJson(Map<String, dynamic> json) {
     var tagsFromJson = json['tags'] as List;
     List<Tag> tagList = tagsFromJson.map((tag) => Tag.fromJson(tag)).toList();
 
-    return ProblemModel(
+    return ProblemNumSearchModel(
       problemId: json['problemId'],
       titleKo: json['titleKo'],
       isSolvable: json['isSolvable'],
@@ -58,12 +59,7 @@ class DisplayName {
   final String language;
   final String name;
 
-  DisplayName({required this.language, required this.name});
-
-  factory DisplayName.fromJson(Map<String, dynamic> json) {
-    return DisplayName(
-      language: json['language'],
-      name: json['name'],
-    );
-  }
+  DisplayName.fromJson(Map<String, dynamic> json)
+      : language = json['language'],
+        name = json['name'];
 }

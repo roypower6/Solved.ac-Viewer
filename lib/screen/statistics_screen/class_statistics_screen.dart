@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solved_ac_browser/model/class_statistics_model.dart';
+import 'package:solved_ac_browser/model/statistics_model/class_statistics_model.dart';
 import 'package:solved_ac_browser/screen/statistics_screen/constants.dart';
 import 'package:solved_ac_browser/screen/statistics_screen/stat_card.dart';
 import 'package:solved_ac_browser/service/api_service.dart';

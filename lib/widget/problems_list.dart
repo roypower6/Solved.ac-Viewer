@@ -36,7 +36,7 @@ class ProblemsList extends StatelessWidget {
                 child: Text('문제 목록을 불러오는데 실패했습니다.'),
               );
             } else {
-              final problemList = snapshot.data as List<ProblemsModel>;
+              final problemList = snapshot.data as List<ProblemsListModel>;
 
               return GridView.builder(
                 padding: const EdgeInsets.all(0),

@@ -1,4 +1,5 @@
-class ProblemModel {
+//백준 문제 정보 모델
+class ProblemNameSearchModel {
   final int problemId;
   final String titleKo;
   final List<TitleModel> titles;
@@ -14,7 +15,7 @@ class ProblemModel {
   final bool official;
   final List<TagModel> tags;
 
-  ProblemModel({
+  ProblemNameSearchModel({
     required this.problemId,
     required this.titleKo,
     required this.titles,
@@ -31,8 +32,8 @@ class ProblemModel {
     required this.tags,
   });
 
-  factory ProblemModel.fromJson(Map<String, dynamic> json) {
-    return ProblemModel(
+  factory ProblemNameSearchModel.fromJson(Map<String, dynamic> json) {
+    return ProblemNameSearchModel(
       problemId: json['problemId'],
       titleKo: json['titleKo'],
       titles: (json['titles'] as List)
@@ -60,21 +61,11 @@ class TitleModel {
   final String title;
   final bool isOriginal;
 
-  TitleModel({
-    required this.language,
-    required this.languageDisplayName,
-    required this.title,
-    required this.isOriginal,
-  });
-
-  factory TitleModel.fromJson(Map<String, dynamic> json) {
-    return TitleModel(
-      language: json['language'],
-      languageDisplayName: json['languageDisplayName'],
-      title: json['title'],
-      isOriginal: json['isOriginal'],
-    );
-  }
+  TitleModel.fromJson(Map<String, dynamic> json)
+      : language = json['language'],
+        languageDisplayName = json['languageDisplayName'],
+        title = json['title'],
+        isOriginal = json['isOriginal'];
 }
 
 class TagModel {
@@ -110,17 +101,8 @@ class DisplayNameModel {
   final String name;
   final String short;
 
-  DisplayNameModel({
-    required this.language,
-    required this.name,
-    required this.short,
-  });
-
-  factory DisplayNameModel.fromJson(Map<String, dynamic> json) {
-    return DisplayNameModel(
-      language: json['language'],
-      name: json['name'],
-      short: json['short'],
-    );
-  }
+  DisplayNameModel.fromJson(Map<String, dynamic> json)
+      : language = json['language'],
+        name = json['name'],
+        short = json['short'];
 }

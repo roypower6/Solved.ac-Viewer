@@ -1,3 +1,4 @@
+//문제풀이 정보 모델
 class ClassStatisticsModel {
   final int classes;
   final int totalSolved;

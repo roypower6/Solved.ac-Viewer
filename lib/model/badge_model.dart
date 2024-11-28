@@ -1,3 +1,4 @@
+//뱃지 정보 모델
 class BadgeModel {
   final String badgeImageUrl;
   final String displayName;

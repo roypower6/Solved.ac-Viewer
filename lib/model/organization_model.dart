@@ -1,3 +1,4 @@
+//사용자 소속 단체 모델
 class OrganizationModel {
   final String name;
   final int rating;
