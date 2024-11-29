@@ -91,13 +91,13 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
   Widget _buildPieChartCard(List<LevelStatisticsModel> stats) {
     return StatCard(
       title: '난이도별 분포',
-      height: 420,
+      height: 450,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: PieChart(
           PieChartData(
-            sectionsSpace: 2,
-            centerSpaceRadius: 70,
+            sectionsSpace: 1,
+            centerSpaceRadius: 60,
             sections: stats.map((stat) {
               final percentage = (stat.solved /
                       stats.fold(0, (sum, item) => sum + item.solved)) *

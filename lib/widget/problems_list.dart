@@ -10,65 +10,204 @@ class ProblemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 4,
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
+    return Container(
+      height: 500,
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade900,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: FutureBuilder(
+        future: problems,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError || !snapshot.hasData) {
+            return const Center(
+              child: Text(
+                '문제 목록을 불러오는데 실패했습니다.',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
+
+          final problemList = snapshot.data as List<ProblemsListModel>;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.emoji_events_rounded,
+                    color: Colors.amber,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '해결한 문제 중 상위 100문제',
+                    style: TextStyle(
+                      color: Colors.grey.shade100,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: (problemList.length / 2).ceil(),
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: _buildProblemCard(
+                              problemList[index * 2], index * 2, context),
+                        ),
+                        const SizedBox(width: 8),
+                        if (index * 2 + 1 < problemList.length)
+                          Expanded(
+                            child: _buildProblemCard(problemList[index * 2 + 1],
+                                index * 2 + 1, context),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProblemCard(
+      ProblemsListModel problem, int index, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        onTap: () => _showProblemDetails(context, problem),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade800,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: probTierColors[problem.level] ?? Colors.grey,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: probTierColors[problem.level]?.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    color: probTierColors[problem.level],
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '#${problem.problemId}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      probTierMapping[problem.level] ?? 'Unknown',
+                      style: TextStyle(
+                        color: probTierColors[problem.level],
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.military_tech_rounded,
+                color: probTierColors[problem.level],
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showProblemDetails(BuildContext context, ProblemsListModel problem) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          problem.titleko,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.military_tech_rounded,
+                  color: probTierColors[problem.level],
+                  size: 25,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  probTierMapping[problem.level] ?? 'Unknown',
+                  style: TextStyle(color: Colors.grey.shade300),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '문제 번호: ${problem.problemId}',
+              style: TextStyle(color: Colors.grey.shade300),
             ),
           ],
         ),
-        child: FutureBuilder(
-          future: problems,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError || !snapshot.hasData) {
-              return const Center(
-                child: Text('문제 목록을 불러오는데 실패했습니다.'),
-              );
-            } else {
-              final problemList = snapshot.data as List<ProblemsListModel>;
-
-              return GridView.builder(
-                padding: const EdgeInsets.all(0),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8, // 한 줄에 8개씩 배치
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 4.0,
-                  childAspectRatio: 1, // 정사각형 형태로 맞춤
-                ),
-                itemCount: problemList.length,
-                itemBuilder: (context, index) {
-                  final problem = problemList[index];
-                  return Tooltip(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    triggerMode: TooltipTriggerMode.tap,
-                    message:
-                        '${problem.titleko} \n백준 문제번호: ${problem.problemId}\n문제 티어: ${probTierMapping[problem.level]}',
-                    showDuration: const Duration(seconds: 4),
-                    child: Icon(
-                      Icons.book_rounded,
-                      color: probTierColors[problem.level] ?? Colors.grey,
-                      size: 40,
-                    ),
-                  );
-                },
-              );
-            }
-          },
-        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              '닫기',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
       ),
     );
   }

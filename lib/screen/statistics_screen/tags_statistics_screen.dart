@@ -30,53 +30,92 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     final filteredStats =
         tagsStatistics.where((tagStat) => tagStat.solved > 0).toList();
 
+    _tagColors.clear();
+
     for (var tagStat in filteredStats) {
-      _tagColors[tagStat.key] = _getRandomBrightColor();
+      _tagColors[tagStat.key] = _getRandomPastelColor();
     }
 
     return filteredStats;
   }
 
-  Color _getRandomBrightColor() {
+  Color _getRandomPastelColor() {
     final Random random = Random();
-    return Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
-    );
+
+    final hue = random.nextDouble() * 360;
+    final saturation = 35 + random.nextDouble() * 30;
+    final lightness = 65 + random.nextDouble() * 20;
+
+    final hslColor =
+        HSLColor.fromAHSL(1, hue, saturation / 100, lightness / 100);
+    return hslColor.toColor();
   }
 
   Widget _buildPieChart(List<TagStatisticsModel> tagStats) {
-    tagStats.sort((a, b) => b.solved.compareTo(a.solved));
-    final totalSolved = tagStats.fold<int>(0, (sum, item) => sum + item.solved);
+    final totalSolved = tagStats.fold(0, (sum, tag) => sum + tag.solved);
 
     return StatCard(
-      title: '태그별 분포',
-      height: 420,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: PieChart(
-          PieChartData(
-            sectionsSpace: 2,
-            centerSpaceRadius: 70,
-            sections: tagStats.map((tagStat) {
-              final percentage = (tagStat.solved / totalSolved) * 100;
-              return PieChartSectionData(
-                value: tagStat.solved.toDouble(),
-                title:
-                    percentage >= 5 ? '${percentage.toStringAsFixed(1)}%' : '',
-                color: _tagColors[tagStat.key]!,
-                radius: 100,
-                titleStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              );
-            }).toList(),
+      title: '태그별 문제 비율',
+      height: 450,
+      child: Column(
+        children: [
+          Expanded(
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 1,
+                centerSpaceRadius: 30,
+                sections: tagStats.map((tag) {
+                  final percentage = (tag.solved / totalSolved * 100);
+                  return PieChartSectionData(
+                    value: tag.solved.toDouble(),
+                    title: percentage >= 3
+                        ? '${percentage.toStringAsFixed(1)}%'
+                        : '',
+                    titleStyle: AppStyles.bodyStyle.copyWith(
+                      fontSize: 11,
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    color: _tagColors[tag.key],
+                    radius: 120,
+                    showTitle: true,
+                  );
+                }).toList(),
+              ),
+              swapAnimationDuration: const Duration(milliseconds: 150),
+            ),
           ),
-        ),
+          // 상위 5개 태그에 대한 범례 추가
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: tagStats.take(5).map((tag) {
+                final percentage = (tag.solved / totalSolved * 100);
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: _tagColors[tag.key],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${tag.displayName} (${percentage.toStringAsFixed(1)}%)',
+                      style: AppStyles.bodyStyle.copyWith(fontSize: 12),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -159,13 +198,18 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
             final sortedStats = snapshot.data!
               ..sort((a, b) => b.solved.compareTo(a.solved));
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildPieChart(sortedStats),
-                const SizedBox(height: 5),
-                _buildTagList(sortedStats),
-              ],
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildPieChart(sortedStats),
+                    const SizedBox(height: 16),
+                    _buildTagList(sortedStats),
+                  ],
+                ),
+              ),
             );
           },
         ),

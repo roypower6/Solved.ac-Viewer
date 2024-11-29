@@ -7,7 +7,7 @@ import 'package:solved_ac_browser/service/api_service.dart';
 class TopPortion extends StatelessWidget {
   final Future<dynamic> user;
 
-  static const double _profileSize = 120.0;
+  static const double _profileSize = 115.0;
   static const double _badgeSize = 40.0;
 
   const TopPortion({super.key, required this.user});
@@ -51,18 +51,27 @@ class TopPortion extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        _buildBackground(background),
-        _buildBackgroundInfoButton(background),
-        _buildProfileImage(user, badgeData),
+        _buildBackground(context, background),
+        _buildBackgroundInfoButton(context, background),
+        _buildProfileImage(context, user, badgeData),
         _buildActionButtons(context),
       ],
     );
   }
 
-  Widget _buildBackground(BackgroundModel background) {
+  Widget _buildBackground(BuildContext context, BackgroundModel background) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 50),
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 25),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 10,
+            spreadRadius: 2,
+            offset: const Offset(0, 4),
+          ),
+        ],
         image: DecorationImage(
           fit: BoxFit.cover,
           image: NetworkImage(background.backgroundImageUrl),
@@ -73,36 +82,93 @@ class TopPortion extends StatelessWidget {
           colors: [Color(0xff0043ba), Color(0xff006df1)],
         ),
       ),
-    );
-  }
-
-  Widget _buildBackgroundInfoButton(BackgroundModel background) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 15),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Tooltip(
-          triggerMode: TooltipTriggerMode.tap,
-          showDuration: const Duration(seconds: 10),
-          message:
-              "배경 이름: ${background.displayName}\n배경 설명: ${background.displayDescription}\n획득 조건: ${background.conditions}",
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-          child: const Icon(
-            Icons.photo_size_select_actual_rounded,
-            color: Colors.white,
-            size: 32,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black.withOpacity(0.3),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildProfileImage(UserModel user, BadgeModel badgeData) {
+  Widget _buildBackgroundInfoButton(
+      BuildContext context, BackgroundModel background) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25),
+      padding: const EdgeInsets.only(top: 20, left: 20),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  backgroundColor: Colors.grey[900],
+                  title: const Text(
+                    '배경 정보',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '배경 이름: ${background.displayName}',
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '배경 설명: ${background.displayDescription}',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '획득 조건: ${background.conditions}',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        '닫기',
+                        style: TextStyle(color: Colors.lightBlueAccent),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.photo_size_select_actual_rounded,
+              size: 28,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileImage(
+      BuildContext context, UserModel user, BadgeModel badgeData) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 35),
       child: Align(
         alignment: Alignment.bottomLeft,
         child: SizedBox(
@@ -162,38 +228,64 @@ class TopPortion extends StatelessWidget {
 
   Widget _buildActionButtons(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5, right: 5),
+      padding: const EdgeInsets.only(top: 20, right: 15),
       child: Align(
         alignment: Alignment.topRight,
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              icon: const Icon(Icons.list, size: 45, color: Colors.white),
-            ),
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('앱 도움말'),
-                    content: const Text(
-                      '왼쪽 위의 리스트 아이콘을 누르면 다양한 통계와 코인샵에서 살 수 있는 아이템, 백준 문제 등을 볼 수 있습니다!\n\n보유 코인 수와 별가루 수가 있는 박스를 누르면 가지고 있는 별가루를 통해 현재 교환 가능한 코인 수를 알 수 있습니다.\n\n하단의 검은색 박스 안에는 유저님이 푸신 문제 중 상위 100문제가 리스트로 정렬되어 있습니다.한 번 눌러서 문제 이름과 난이도, 문제 번호들을 확인해 보세요!\n',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('닫기'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.grey[900],
+                      title: const Text(
+                        '앱 도움말',
+                        style: TextStyle(color: Colors.white),
                       ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.info_rounded,
-                size: 30,
-                color: Colors.white,
+                      content: const Text(
+                        '왼쪽 위의 리스트 아이콘을 누르면 다양한 통계와 코인샵에서 살 수 있는 아이템, 백준 문제 등을 볼 수 있습니다!\n\n보유 코인 수와 별가루 수가 있는 박스를 누르면 가지고 있는 별가루를 통해 현재 교환 가능한 코인 수를 알 수 있습니다.\n\n하단의 검은색 박스 안에는 유저님이 푸신 문제 중 상위 100문제가 리스트로 정렬되어 있습니다.한 번 눌러서 문제 이름과 난이도, 문제 번호들을 확인해 보세요!\n',
+                        style: TextStyle(
+                            color: Colors.white70, fontWeight: FontWeight.bold),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text(
+                            '닫기',
+                            style: TextStyle(color: Colors.lightBlueAccent),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.info_rounded,
+                  size: 28,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: IconButton(
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+                icon: const Icon(
+                  Icons.list,
+                  size: 28,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

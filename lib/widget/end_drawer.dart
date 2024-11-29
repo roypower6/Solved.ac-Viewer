@@ -123,7 +123,7 @@ class EndDrawer extends StatelessWidget {
                       Icon(Icons.info_outline, color: Colors.grey),
                       SizedBox(width: 10),
                       Text(
-                        'App Version: 1.0.3',
+                        'App Version: 1.0.5',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],

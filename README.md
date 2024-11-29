@@ -2,7 +2,7 @@
 
 > **💡 solved.ac 사용자들을 위한 간편한 통계 조회 애플리케이션**
 
-[![v1.0.3](https://img.shields.io/github/v/release/roypower6/Solved.ac-Viewer?color=blue&label=app%20download&logo=android)](https://github.com/roypower6/Solved.ac-Viewer/releases/latest)
+[![app download](https://img.shields.io/github/v/release/roypower6/Solved.ac-Viewer?color=blue&label=app%20download&logo=android)](https://github.com/roypower6/Solved.ac-Viewer/releases/latest)
 
 ## **📱 소개**
 solved.ac 비공식 API를 활용하여 개발된 애플리케이션으로, 웹 접속 없이도 편리하게 코딩 학습 현황을 다양한 지표로 확인할 수 있습니다.
