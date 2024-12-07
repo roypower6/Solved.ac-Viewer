@@ -53,15 +53,14 @@ class TopPortion extends StatelessWidget {
       children: [
         _buildBackground(context, background),
         _buildBackgroundInfoButton(context, background),
-        _buildProfileImage(context, user, badgeData),
-        _buildActionButtons(context),
+        _buildActionButtons(context, user, badgeData),
       ],
     );
   }
 
   Widget _buildBackground(BuildContext context, BackgroundModel background) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 25),
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
@@ -165,68 +164,8 @@ class TopPortion extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage(
-      BuildContext context, UserModel user, BadgeModel badgeData) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 35),
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: SizedBox(
-          width: _profileSize,
-          height: _profileSize,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 6,
-                      spreadRadius: 2,
-                      offset: const Offset(3, 4),
-                    )
-                  ],
-                  color: Colors.black,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(user.profileImageUrl),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Tooltip(
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  showDuration: const Duration(seconds: 4),
-                  triggerMode: TooltipTriggerMode.tap,
-                  message:
-                      "뱃지 이름: ${badgeData.displayName}\n설명: ${badgeData.displayDescription}",
-                  child: Container(
-                    width: _badgeSize,
-                    height: _badgeSize,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(badgeData.badgeImageUrl),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context,
+      [UserModel? user, BadgeModel? badgeData]) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, right: 15),
       child: Align(
@@ -274,6 +213,86 @@ class TopPortion extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            if (user != null && badgeData != null) ...[
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        backgroundColor: Colors.grey[900],
+                        title: const Text(
+                          '프로필 정보',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: _profileSize,
+                              height: _profileSize,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(user.profileImageUrl),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              width: _badgeSize,
+                              height: _badgeSize,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(badgeData.badgeImageUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "뱃지 이름: ${badgeData.displayName}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "설명: ${badgeData.displayDescription}",
+                              style: const TextStyle(
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text(
+                              '닫기',
+                              style: TextStyle(color: Colors.lightBlueAccent),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.account_circle,
+                    size: 28,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
             Container(
               decoration: BoxDecoration(
                 color: Colors.black26,
