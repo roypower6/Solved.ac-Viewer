@@ -24,29 +24,102 @@ class TopPortion extends StatelessWidget {
 
   Widget _buildUserContent(
       BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    if (snapshot.hasError) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: Colors.grey[900],
+            ),
+            child: Center(
+              child: Text(
+                '데이터를 불러오는데 실패했습니다.\n${snapshot.error}',
+                style: const TextStyle(color: Colors.white70),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
     if (!snapshot.hasData) {
       return const Center(child: CircularProgressIndicator());
     }
 
     final user = snapshot.data as UserModel;
+
     return FutureBuilder(
       future: Future.wait([
         SolvedacApi.getbackgroundInfo(user.backgroundId),
         SolvedacApi.getBadgeInfo(user.badgeId),
       ]),
-      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) =>
-          _buildUserProfile(context, snapshot, user),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.hasError) {
+          // 프로필 정보 불러오기 실패 시
+          return Center(
+            child: Text(
+              '프로필 정보를 불러오는데 실패했습니다.\n${snapshot.error}',
+              style: const TextStyle(color: Colors.white70),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+        return _buildUserProfile(context, snapshot, user);
+      },
     );
   }
 
   Widget _buildUserProfile(BuildContext context,
       AsyncSnapshot<List<dynamic>> snapshot, UserModel user) {
-    if (!snapshot.hasData) {
-      return Container(color: Colors.transparent);
+    if (!snapshot.hasData || snapshot.data == null) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: Colors.grey[900],
+            ),
+            child: const Center(
+              child: Text(
+                '배경 및 뱃지 정보를 불러올 수 없습니다.',
+                style: TextStyle(color: Colors.white70),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      );
     }
 
-    final background = snapshot.data![0] as BackgroundModel;
-    final badgeData = snapshot.data![1] as BadgeModel;
+    final background = snapshot.data![0] as BackgroundModel?;
+    final badgeData = snapshot.data![1] as BadgeModel?;
+
+    if (background == null || badgeData == null) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: Colors.grey[900],
+            ),
+            child: const Center(
+              child: Text(
+                '프로필 데이터가 올바르지 않습니다.',
+                style: TextStyle(color: Colors.white70),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Stack(
       fit: StackFit.expand,
@@ -75,11 +148,7 @@ class TopPortion extends StatelessWidget {
           fit: BoxFit.cover,
           image: NetworkImage(background.backgroundImageUrl),
         ),
-        gradient: const LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [Color(0xff0043ba), Color(0xff006df1)],
-        ),
+        color: Colors.grey[900],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),

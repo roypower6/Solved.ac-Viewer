@@ -176,7 +176,7 @@ class ProfileInfo extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                             message:
-                                '소속 기관 유형: ${org.type}\n소속 기관 전체 난이도 기여 수: ${org.voteCount}\n소속 기관 전체 해결 문제 수: ${org.solvedCount}',
+                                '소속 기관 유형: ${organizationType(org.type)}\n소속 기관 전체 난이도 기여 수: ${org.voteCount} 회\n소속 기관 전체 해결 문제 수: ${org.solvedCount} 문제',
                             child: Container(
                               padding: const EdgeInsets.all(15),
                               margin:
@@ -256,7 +256,7 @@ class ProfileInfo extends StatelessWidget {
                             triggerMode: TooltipTriggerMode.tap,
                             showDuration: const Duration(seconds: 4),
                             message:
-                                '코인으로 환전했을 때 수수료 1%를 제하고 \n${((user.stardusts / coinrateData.rate) * (99 / 100)).toStringAsFixed(2)}코인으로 바꿀 수 있습니다.',
+                                '코인으로 환전했을 때 수수료 1%를 제하고 \n${((user.stardusts / coinrateData.rate) * (99 / 100)).toStringAsFixed(2)}코인으로 바꿀 수 있습니다.\n(현재 환율 기준)',
                             child: Container(
                               width: 250,
                               padding: const EdgeInsets.all(16),
@@ -378,5 +378,23 @@ class ProfileInfo extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String organizationType(String type) {
+    if (type == 'university') {
+      return '대학교';
+    } else if (type == 'high_school') {
+      return '고등학교';
+    } else if (type == 'middle_school') {
+      return '중학교';
+    } else if (type == 'company') {
+      return '기업';
+    } else if (type == 'community') {
+      return '커뮤니티';
+    } else if (type == 'elementary_school') {
+      return '초등학교';
+    } else {
+      return '기타';
+    }
   }
 }
