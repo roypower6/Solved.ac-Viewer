@@ -31,9 +31,9 @@ class ShopScreenState extends State<ShopScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Failed to load shop items.'));
+            return const Center(child: Text('샵 아이템을 불러오는 중 오류가 발생했습니다.'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No items available.'));
+            return const Center(child: Text('구매 가능한 아이템이 없습니다.'));
           } else {
             return _buildShopList(snapshot.data!);
           }
@@ -70,19 +70,44 @@ class ShopItemWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Item Image with Fallback Icon if Image Fails to Load
-            Image.network(
-              shopItem.itemImageUrl,
+            Container(
               width: 50,
               height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                // Fallback icon when the image fails to load
-                return const Icon(
-                  Icons.card_giftcard_outlined, // Icon as fallback
-                  size: 50,
-                );
-              },
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: shopItem.itemImageUrl.isEmpty
+                  ? const Icon(
+                      Icons.card_giftcard_outlined,
+                      size: 30,
+                      color: Colors.grey,
+                    )
+                  : Image.network(
+                      shopItem.itemImageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.card_giftcard_outlined,
+                          size: 30,
+                          color: Colors.grey,
+                        );
+                      },
+                    ),
             ),
             const SizedBox(width: 16),
             // Item Details

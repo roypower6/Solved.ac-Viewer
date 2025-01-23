@@ -9,6 +9,7 @@ class AppColors {
   static const textSecondary = Color(0xFF757575);
 
   static const tierColors = {
+    'unrated': Color(0xFF9E9E9E),
     'bronze': Color(0xFFAD5600),
     'silver': Color(0xFF435F7A),
     'gold': Color(0xFFEC9A00),

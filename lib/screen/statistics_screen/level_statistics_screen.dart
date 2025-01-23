@@ -30,6 +30,8 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
   }
 
   Color _getColorForLevel(int level) {
+    // 난이도에 따라 색상을 반환
+    if (level == 0) return AppColors.tierColors['unrated']!; // unrated는 회색
     if (level <= 5) return AppColors.tierColors['bronze']!;
     if (level <= 10) return AppColors.tierColors['silver']!;
     if (level <= 15) return AppColors.tierColors['gold']!;
@@ -56,6 +58,7 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
                 child: CircularProgressIndicator(color: AppColors.primary),
               );
             } else if (snapshot.hasError || !snapshot.hasData) {
+              // 에러가 있거나 데이터가 없으면 에러 메시지를 출력
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +67,7 @@ class _LevelStatisticsScreenState extends State<LevelStatisticsScreen> {
                         size: 48, color: Colors.red),
                     const SizedBox(height: 16),
                     Text(
+                      // 에러가 있으면 에러 메시지를, 에러가 없다는 건 데이터가 없다는 것을 의미
                       snapshot.hasError ? '통계를 불러오는데 실패했습니다.' : '통계 데이터가 없습니다.',
                       style: AppStyles.bodyStyle,
                     ),
