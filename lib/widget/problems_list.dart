@@ -61,7 +61,16 @@ class ProblemsList extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              Text(
+                '카드를 클릭해서 문제 정보를 확인해 보세요!',
+                style: TextStyle(
+                  color: Colors.grey.shade300,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
@@ -168,6 +177,7 @@ class ProblemsList extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey.shade900,
         title: Text(
+          // 문제 이름
           problem.titleko,
           style: const TextStyle(
             color: Colors.white,
@@ -187,6 +197,7 @@ class ProblemsList extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
+                  // 문제 난이도
                   probTierMapping[problem.level] ?? 'Unknown',
                   style: TextStyle(color: Colors.grey.shade300),
                 ),
@@ -194,7 +205,18 @@ class ProblemsList extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
+              // 문제 번호
               '문제 번호: ${problem.problemId}',
+              style: TextStyle(color: Colors.grey.shade300),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "문제 푼 사람: ${problem.acceptedUserCount}명",
+              style: TextStyle(color: Colors.grey.shade300),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "평균 시도 횟수: ${problem.averageTries.toStringAsFixed(1)}회",
               style: TextStyle(color: Colors.grey.shade300),
             ),
           ],
