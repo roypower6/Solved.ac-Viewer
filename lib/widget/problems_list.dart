@@ -219,6 +219,48 @@ class ProblemsList extends StatelessWidget {
               "평균 시도 횟수: ${problem.averageTries.toStringAsFixed(1)}회",
               style: TextStyle(color: Colors.grey.shade300),
             ),
+            const SizedBox(height: 12),
+            if (problem.tags.isNotEmpty) ...[
+              Text(
+                "태그:",
+                style: TextStyle(
+                  color: Colors.grey.shade300,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6.0,
+                runSpacing: 6.0,
+                children: problem.tags.map((tag) {
+                  // 한국어 이름을 찾거나 기본 이름(key)를 사용
+                  String tagName = tag.displayNames
+                      .firstWhere(
+                        // 한국어 이름이 있는지 확인
+                        (name) => name.language == 'ko',
+                        orElse: () => tag.displayNames.first, // 없으면 기본 이름 사용
+                      )
+                      .name;
+
+                  return Chip(
+                    backgroundColor: tag.isMeta
+                        ? Colors.blue.shade700 // 메타 태그는 파란색
+                        : Colors.grey.shade700, // 나머지는 회색
+                    label: Text(
+                      tagName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: const EdgeInsets.all(0),
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  );
+                }).toList(),
+              ),
+            ],
           ],
         ),
         actions: [
